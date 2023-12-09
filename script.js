@@ -21,3 +21,58 @@ $(function () {
   //
   // TODO: Add code to display the current date in the header of the page.
 });
+
+/*
+  .setCurrentDate (JQUERY MEMBER FUNCTION)
+  > pass today as a global Date object:
+  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+*/
+
+const myWeekDay = function(int)
+{
+  const days = [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday'
+  ];
+  return days[int - 1];
+}
+
+const myMonth = function(int)
+{
+  const months = [
+                  'January',
+                  'February',
+                  'March',
+                  'April',
+                  'May',
+                  'June',
+                  'July',
+                  'August',
+                  'September',
+                  'October',
+                  'November',
+                  'December'
+  ];
+  return months[int];
+}
+
+$.fn.setCurrentDate = function(today)
+{
+  // const timeSlot = $('#currentDay');
+  const weekday = myWeekDay(today.getDay());
+  const month = myMonth(today.getMonth());
+  const day = today.getDate();
+  const year = today.getFullYear();
+
+  this.text(`${weekday}, ${month} ${day}, ${year}`);
+}
+
+const today = new Date();
+// today.setTime(1699567455);
+$('#currentDay').setCurrentDate(today);
+
