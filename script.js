@@ -21,3 +21,14 @@ $(function () {
   //
   // TODO: Add code to display the current date in the header of the page.
 });
+
+/*
+  .setCurrentDate (JQUERY MEMBER FUNCTION)
+  > pass today as a global Date object:
+  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+*/
+$.setCurrentDate = function(today)
+{
+  // const timeSlot = $('#currentDay');
+  this.text(`${today.getDay()}, ${today.getMonth()} ${today.getDate()} ${today.getFullYear()}`);
+}
