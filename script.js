@@ -61,6 +61,12 @@ const myMonth = function(int)
   return months[int];
 }
 
+/*
+  setCurrentDate (jQuery element plugin)
+  updates this.text (element invoked on) with formatted day of the week,
+  month, date, and year
+*/
+
 $.fn.setCurrentDate = function(today)
 {
   // const timeSlot = $('#currentDay');
@@ -74,5 +80,7 @@ $.fn.setCurrentDate = function(today)
 
 const today = new Date();
 // today.setTime(1699567455);
+
+// set current date
 $('#currentDay').setCurrentDate(today);
 
