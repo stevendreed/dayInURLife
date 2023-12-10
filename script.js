@@ -40,16 +40,17 @@ $(function () {
 
 const myWeekDay = function(int)
 {
+  // console.log(int); // debugging
   const days = [
+                'Sunday',
                 'Monday',
                 'Tuesday',
                 'Wednesday',
                 'Thursday',
                 'Friday',
-                'Saturday',
-                'Sunday'
+                'Saturday'
   ];
-  return days[int - 1];
+  return days[int % 7];
 }
 
 const myMonth = function(int)
