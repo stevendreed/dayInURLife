@@ -2,6 +2,14 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
+  
+  const today = new Date();
+  // today.setTime(1699567455);
+
+  // set current date
+  $('#currentDay').setCurrentDate(today);
+
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -78,9 +86,13 @@ $.fn.setCurrentDate = function(today)
   this.text(`${weekday}, ${month} ${day}, ${year}`);
 }
 
-const today = new Date();
-// today.setTime(1699567455);
+// save to localstorage
+$.fn.textToLS = function()
+{
+  let label = this.text();
+  let content = this.children('.description').text();
+  console.log(`label = ${label} | content = ${content}`); // debugging
 
-// set current date
-$('#currentDay').setCurrentDate(today);
+}
 
+$('.time-block').textToLS(); // debugging
