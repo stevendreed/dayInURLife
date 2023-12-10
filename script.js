@@ -4,12 +4,14 @@
 $(function () {
   
   const today = new Date();
+  const timeRange = [8,9,10,11,12,13,14,15,16,17,18,19,20];
   // today.setTime(1699567455);
 
   // set current date
   $('#currentDay').setCurrentDate(today);
 
 
+  $('.container-fluid').generateDates(timeRange, today.getHours());
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -94,7 +96,7 @@ $.fn.textToLS = function()
   console.log(`label = ${label} | content = ${content}`); // debugging
 
   // save to local storage
-  localStorage.setItem('label', content);
+  localStorage.setItem(label, content);
 }
 // load from localStorage
 const loadFromLS = function(key)
@@ -103,4 +105,31 @@ const loadFromLS = function(key)
     localStorage.getItem('key'));
 }
 
-$('.time-block').textToLS(); // debugging
+$.fn.generateDates = function(range, hour)
+{
+  for (let i = 0; i < range.length; i++)
+  {
+    // set past, present, future colors
+    if (hour > range[i])
+    {
+      this.append(`<div id="hour-${range[i]}" class="row time-block past">`);
+    }
+    else if (hour === range[i])
+    {
+      this.append(`<div id="hour-${range[i]}" class="row time-block present">`);
+    }
+    else if (hour < range[i])
+    {
+      this.append(`<div id="hour-${range[i]}" class="row time-block future">`);
+    }
+    // this.append(`<div id="hour-${range[i]}" class="row time-block">`)
+    this.children(`#hour-${range[i]}`)
+      .append(`<div class="col-2 col-md-1 hour text-center py-3">${range[i]}:00`)
+      .append(`<textarea class="col-8 col-md-10 description" rows="3"></textarea>`)
+      .append(`<button class="btn saveBtn col-2 col-md-1" aria-label="save">`)
+        .children('.btn')
+        .append(`<i class="fas fa-save" aria-hidden="true"></i>`);
+  }
+}
+
+// $('.time-block').textToLS(); // debugging
