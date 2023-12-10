@@ -86,13 +86,21 @@ $.fn.setCurrentDate = function(today)
   this.text(`${weekday}, ${month} ${day}, ${year}`);
 }
 
-// save to localstorage
+// save to localStorage
 $.fn.textToLS = function()
 {
   let label = this.text();
   let content = this.children('.description').text();
   console.log(`label = ${label} | content = ${content}`); // debugging
 
+  // save to local storage
+  localStorage.setItem('label', content);
+}
+// load from localStorage
+const loadFromLS = function(key)
+{
+  return JSON.parse(
+    localStorage.getItem('key'));
 }
 
 $('.time-block').textToLS(); // debugging
