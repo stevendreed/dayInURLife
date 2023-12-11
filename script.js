@@ -123,9 +123,14 @@ const textToLS = function(label, content)
 const loadFromLS = function(key)
 {
 
-  let returnedVal = JSON.parse(localStorage.getItem(key));
-  console.log(`value found: {"${returnedVal.key}":"${returnedVal.value}"}`);
-  return returnedVal.value;
+  // let returnedVal = JSON.parse(localStorage.getItem(key));
+  let storedVal = localStorage.getItem(key);
+  // if (storedVal)
+  // {
+  console.log(`value found: {"${key}":${storedVal}}`);
+  return JSON.parse(storedVal);
+  // }
+  // return storedVal;
 }
 
 $.fn.generateDates = function(range, hour)
@@ -149,12 +154,21 @@ $.fn.generateDates = function(range, hour)
     // this.append(`<div id="hour-${val}" class="row time-block">`)
     this.children(`#hour-${val}`)
       .append(`<div class="col-2 col-md-1 hour text-center py-3">${val}:00`)
-      .append(`<textarea class="col-8 col-md-10 description" rows="3"></textarea>`)
+      .append(`<textarea class="col-8 col-md-10 description" id="textarea-${val}" rows="3"></textarea>`)
       .append(`<button class="btn saveBtn col-2 col-md-1" aria-label="save">`)
         .children('.btn')
         .append(`<i class="fas fa-save" aria-hidden="true"></i>`);
 
-    this.children(`.description`).val(loadFromLS(`hour-${val}`));
+    // console.log(loadFromLS(`hour-${val}`));
+    let savedData = loadFromLS(`hour-${val}`);
+    console.log(`savedData = ${savedData}`);
+    // this.children('.description').text(JSON.stringify(loadFromLS(`hour-${val}`)));
+    console.log(`element to apply to: ${this.find('.description')[0]}`);
+    this.find(`#textarea-${val}`).val(savedData);
+    // console.log(`text area for each: ${this.children('textarea').text()}`);
+    // $(this.children(`textarea`)).val(JSON.stringify(loadFromLS(`hour-${val}`)));
+    // console.log('this.children(`.description`).val()) = ' + 
+    // `${this.children(`.description`).val()}`);
     // console.log(`hour-${val}`); // debugging
   }
 }
