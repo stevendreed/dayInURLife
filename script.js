@@ -5,7 +5,6 @@ $(function ()
 {  
   const today = new Date();
   const timeRange = [9,10,11,12,13,14,15,16,17];
-  // today.setTime(1699567455);
 
   // set current date
   $('#currentDay').setCurrentDate(today);
@@ -33,7 +32,6 @@ $(function ()
 */
 const myWeekDay = function(int)
 {
-  // console.log(int); // debugging
   const days = [
                 'Sunday',
                 'Monday',
@@ -75,7 +73,6 @@ const myMonth = function(int)
 */
 $.fn.setCurrentDate = function(today)
 {
-  // const timeSlot = $('#currentDay');
   const weekday = myWeekDay(today.getDay());
   const month = myMonth(today.getMonth());
   const day = today.getDate();
