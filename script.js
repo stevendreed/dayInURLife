@@ -1,8 +1,8 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-$(function () {
-  
+$(function ()
+{  
   const today = new Date();
   const timeRange = [8,9,10,11,12,13,14,15,16,17,18,19,20];
   // today.setTime(1699567455);
@@ -12,6 +12,24 @@ $(function () {
 
 
   $('.container-fluid').generateDates(timeRange, today.getHours());
+
+  $('.saveBtn').on('click', function()
+  {
+    console.log(this); // debugging
+
+    const text = $(this).siblings('.description').val();
+    console.log(`text = ${text}`);
+
+    const key = $(this).parent().attr('id');
+    console.log(`key = ${key}`);
+
+    textToLS(key, text);
+    // $(this).siblings('.description').savetoLS(key);
+    // console.log($('.saveBtn').siblings());
+    // console.log(this.siblings());
+    // let text = this.parents('.time-block').children('.description').val();
+    // console.log(`text = ${text}`);
+  })
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
@@ -40,16 +58,17 @@ $(function () {
 
 const myWeekDay = function(int)
 {
+  // console.log(int); // debugging
   const days = [
+                'Sunday',
                 'Monday',
                 'Tuesday',
                 'Wednesday',
                 'Thursday',
                 'Friday',
-                'Saturday',
-                'Sunday'
+                'Saturday'
   ];
-  return days[int - 1];
+  return days[int % 7];
 }
 
 const myMonth = function(int)
@@ -89,47 +108,83 @@ $.fn.setCurrentDate = function(today)
 }
 
 // save to localStorage
-$.fn.textToLS = function()
+const textToLS = function(label, content)
 {
-  let label = this.text();
-  let content = this.children('.description').text();
-  console.log(`label = ${label} | content = ${content}`); // debugging
+  // let content = this.val();
+  // let label = this.text();
+  // let content = this.children('.description').text();
+  // console.log(`label = ${label} | content = ${content}`); // debugging
 
   // save to local storage
-  localStorage.setItem(label, content);
+  console.log(`stored {"${label}":"${content}"}`);
+  localStorage.setItem(label, JSON.stringify(content));
 }
 // load from localStorage
 const loadFromLS = function(key)
 {
-  return JSON.parse(
-    localStorage.getItem('key'));
+
+  // let returnedVal = JSON.parse(localStorage.getItem(key));
+  let storedVal = localStorage.getItem(key);
+  // if (storedVal)
+  // {
+  console.log(`value found: {"${key}":${storedVal}}`);
+  return JSON.parse(storedVal);
+  // }
+  // return storedVal;
 }
 
 $.fn.generateDates = function(range, hour)
 {
   for (let i = 0; i < range.length; i++)
   {
+    let val = range[i];
     // set past, present, future colors
-    if (hour > range[i])
+    if (hour > val)
     {
-      this.append(`<div id="hour-${range[i]}" class="row time-block past">`);
+      this.append(`<div id="hour-${val}" class="row time-block past">`);
     }
-    else if (hour === range[i])
+    else if (hour === val)
     {
-      this.append(`<div id="hour-${range[i]}" class="row time-block present">`);
+      this.append(`<div id="hour-${val}" class="row time-block present">`);
     }
-    else if (hour < range[i])
+    else if (hour < val)
     {
-      this.append(`<div id="hour-${range[i]}" class="row time-block future">`);
+      this.append(`<div id="hour-${val}" class="row time-block future">`);
     }
-    // this.append(`<div id="hour-${range[i]}" class="row time-block">`)
-    this.children(`#hour-${range[i]}`)
-      .append(`<div class="col-2 col-md-1 hour text-center py-3">${range[i]}:00`)
-      .append(`<textarea class="col-8 col-md-10 description" rows="3"></textarea>`)
+    // this.append(`<div id="hour-${val}" class="row time-block">`)
+    this.children(`#hour-${val}`)
+      .append(`<div class="col-2 col-md-1 hour text-center py-3">${val}:00`)
+      .append(`<textarea class="col-8 col-md-10 description" id="textarea-${val}" rows="3"></textarea>`)
       .append(`<button class="btn saveBtn col-2 col-md-1" aria-label="save">`)
         .children('.btn')
         .append(`<i class="fas fa-save" aria-hidden="true"></i>`);
+
+    // console.log(loadFromLS(`hour-${val}`));
+    let savedData = loadFromLS(`hour-${val}`);
+    console.log(`savedData = ${savedData}`);
+    // this.children('.description').text(JSON.stringify(loadFromLS(`hour-${val}`)));
+    console.log(`element to apply to: ${this.find('.description')[0]}`);
+    this.find(`#textarea-${val}`).val(savedData);
+    // console.log(`text area for each: ${this.children('textarea').text()}`);
+    // $(this.children(`textarea`)).val(JSON.stringify(loadFromLS(`hour-${val}`)));
+    // console.log('this.children(`.description`).val()) = ' + 
+    // `${this.children(`.description`).val()}`);
+    // console.log(`hour-${val}`); // debugging
   }
 }
 
+/*
+  saveToDo (callback function)
+  adds event listener to el which invokes textToLS plugin
+  enter the key that el data should be stored with (hour-${num} for this app)
+*/
+
+// const saveToDo = function(key)
+// {
+//   this.
+// }
+// $.fn.saveToDo = function(key)
+// {
+//   this.children('textarea').textToLS(key);
+// }
 // $('.time-block').textToLS(); // debugging
