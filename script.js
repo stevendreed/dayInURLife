@@ -26,13 +26,11 @@ $(function ()
     textToLS(key, text);
   })
 });
-
 /*
-  .setCurrentDate (JQUERY MEMBER FUNCTION)
-  > pass today as a global Date object:
-  (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+   myWeekDay (integer) => string
+   simple util function that returns a string of the current
+   day of the week based on Date().getDay()
 */
-
 const myWeekDay = function(int)
 {
   // console.log(int); // debugging
@@ -47,7 +45,11 @@ const myWeekDay = function(int)
   ];
   return days[int % 7];
 }
-
+/*
+   myMonth (integer) => string
+   simple util function that returns a string of the current
+   month based on integer input from Date().getMonth()
+*/
 const myMonth = function(int)
 {
   const months = [
@@ -82,14 +84,14 @@ $.fn.setCurrentDate = function(today)
   this.text(`${weekday}, ${month} ${day}, ${year}`);
 }
 
-// save to localStorage
+// save to localStorage as a string
 const textToLS = function(label, content)
 { 
   console.log(`stored {"${label}":"${content}"}`);
   // save to local storage
   localStorage.setItem(label, JSON.stringify(content));
 }
-// load from localStorage
+// load from localStorage, parsed from stringified form
 const loadFromLS = function(key)
 {
   let storedVal = localStorage.getItem(key);
@@ -98,6 +100,14 @@ const loadFromLS = function(key)
   return JSON.parse(storedVal);
 }
 
+/*
+   generateDates (jQuery plugin)
+   reads in an array of times and the current hour to generate
+   HTML elements onto the page
+
+   upon invocation, each textarea is filled with data from localstorage
+   using loadFromLS utility function
+*/
 $.fn.generateDates = function(range, hour)
 {
   for (let i = 0; i < range.length; i++)
@@ -106,17 +116,21 @@ $.fn.generateDates = function(range, hour)
     // set past, present, future colors
     if (hour > val)
     {
+      // past
       this.append(`<div id="hour-${val}" class="row time-block past">`);
     }
     else if (hour === val)
     {
+      // present
       this.append(`<div id="hour-${val}" class="row time-block present">`);
     }
     else if (hour < val)
     {
+      // future
       this.append(`<div id="hour-${val}" class="row time-block future">`);
     }
-    // this.append(`<div id="hour-${val}" class="row time-block">`)
+    // create a div, text area, and button child from the div created
+    // conditionally based on past, present, or future status
     this.children(`#hour-${val}`)
       .append(`<div class="col-2 col-md-1 hour text-center py-3">${val}:00`)
       .append(`<textarea class="col-8 col-md-10 description" id="textarea-${val}" rows="3"></textarea>`)
@@ -124,6 +138,7 @@ $.fn.generateDates = function(range, hour)
         .children('.btn')
         .append(`<i class="fas fa-save" aria-hidden="true"></i>`);
 
+    // load data from localstorage to initiate textarea with
     let savedData = loadFromLS(`hour-${val}`);
     console.log(`savedData = ${savedData}`);
    
